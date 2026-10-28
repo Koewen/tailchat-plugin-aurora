@@ -1,4 +1,4 @@
-# Tailchat 流光玻璃主题插件 (com.koewen.theme.aurora)
+# Tailchat 流光玻璃主题插件
 
 为 [Tailchat](https://github.com/msgbyte/tailchat) 提供玻璃拟态（Glassmorphism）+ 流光溢彩动效背景的自定义主题插件。
 
