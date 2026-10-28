@@ -28,14 +28,16 @@
   background-color: var(--au-base);
 
   // ---------- 透明流光溢彩背景（两层，均低透明度） ----------
-  position: relative;
+  // 关键：绝不能改根节点 position（会覆盖 absolute inset-0 导致高度塔陷）；
+  // 用 isolation 建立堆叠上下文，伪层 z-index:-1 垫在内容之下、乳白底之上。
+  isolation: isolate;
 
   &::before,
   &::after {
     content: '';
     position: fixed;
     inset: -30%;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     will-change: transform;
   }
@@ -69,11 +71,7 @@
     animation: au-sheen 60s linear infinite;
   }
 
-  // 内容层抬升到背景之上
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  // 内容层无需人为抬升（伪层已是 z-index:-1，自然垫底）
 
   // ---------- 表面：导航栏 / 侧栏 / 内容区 ----------
   .bg-navbar-light,
@@ -121,19 +119,14 @@
   }
 
   // ---------- 卡片：消息气泡 / 面板 ----------
+  // 消息默认透明（避免满屏白块），悬浮时轻提示；引用块玻璃化
   .chat-message-item {
-    background: var(--au-surface) !important;
-    backdrop-filter: blur(14px) saturate(150%);
-    -webkit-backdrop-filter: blur(14px) saturate(150%);
-    border: 1px solid var(--au-line) !important;
-    border-radius: 14px;
-    box-shadow: var(--au-shadow);
-    transition: background-color 0.22s ease, box-shadow 0.22s ease,
-      transform 0.22s ease;
+    border-radius: 12px;
+    transition: background-color 0.18s ease, box-shadow 0.18s ease;
 
     &:hover {
-      background: var(--au-surface-strong) !important;
-      box-shadow: var(--au-shadow-lg);
+      background: rgba(255, 255, 255, 0.45);
+      box-shadow: 0 2px 12px rgba(72, 82, 118, 0.06);
     }
 
     // 引用块
@@ -342,7 +335,7 @@ body {
   .text-gray-500, .text-gray-400 { color: var(--au-ink-3); }
 
   .chat-message-item:hover {
-    background: var(--au-surface-strong) !important;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .bg-white.dark\:bg-gray-600 {
