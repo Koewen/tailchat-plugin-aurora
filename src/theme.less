@@ -416,9 +416,10 @@ body {
   ::selection { background: rgba(125, 148, 255, 0.30); }
 }
 
-// ---------- 导航栏：收缩/展开（v1.7.0：三角箭头 + 双态居中） ----------
+// ---------- 导航栏：收缩/展开（v1.7.1：右缘居中悬浮手柄 + 紧凑间距） ----------
 #tailchat-app.tailchat-app.theme-aurora {
   [data-tc-role='navbar'] {
+    position: relative; // 悬浮手柄的定位基准
     transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -454,11 +455,31 @@ body {
     align-items: flex-start;
   }
 
-  // 展开态：底部设置区固定 72px 宽并居中（与图标轨道对齐）
+  // 展开态：整体间距收紧，让顶部个人区 / 分割线 / 底部设置区排列更紧凑
+  &.au-nav-expand [data-tc-role='navbar'] {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+
+    // 顶部个人区（头像 / 收件箱 / 快速切换）：8px → 2px
+    > .flex-1 > .space-y-2 > * + * {
+      margin-top: 2px !important;
+    }
+
+    // 分割线：antd 默认上下 16px → 6px
+    > .flex-1 > .px-3 .ant-divider {
+      margin: 6px 0 !important;
+    }
+  }
+
+  // 展开态：底部设置区固定 72px 宽居中 + 间距收紧
   &.au-nav-expand [data-tc-role='navbar-settings'] {
     width: 72px !important;
     align-items: center;
-    padding-left: 0 !important;
+    padding-top: 4px !important;
+
+    > * + * {
+      margin-top: 2px !important;
+    }
   }
 
   // 展开态：群组列表允许滚动，避免底部群组被裁切
@@ -477,7 +498,7 @@ body {
     display: block;
     position: absolute;
     left: 74px;
-    width: 126px;
+    width: 120px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 13px;
@@ -496,11 +517,17 @@ body {
     &:hover { color: var(--au-accent); }
   }
 
-  // ---------- 三角箭头切换按钮 ----------
+  // ---------- 三角箭头悬浮手柄：吸附侧栏右缘、垂直居中 ----------
   // 收起态：指向右（可向右展开）；展开态：旋转 180° 指向左
+  // 定位在 navbar 宽度边界（left:100% 随宽度动画滑动），不占据布局空间
   .au-nav-toggle {
-    width: 72px;
-    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 60;
+    width: 22px;
+    height: 60px;
     margin: 0;
     padding: 0;
     border: none;
@@ -510,26 +537,27 @@ body {
     justify-content: center;
     cursor: pointer;
     user-select: none;
-    color: var(--au-ink-3);
+    color: var(--au-ink);
     transition: color 0.2s ease;
 
     .au-tri {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 11px;
-      background: rgba(86, 111, 224, 0.12);
-      border: 1px solid rgba(86, 111, 224, 0.26);
-      box-shadow: 0 2px 8px rgba(72, 82, 118, 0.10);
+      width: 20px;
+      height: 48px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid rgba(86, 111, 224, 0.38);
+      box-shadow: 0 2px 12px rgba(72, 82, 118, 0.28);
+      transform: rotate(var(--au-rot, 0deg));
       transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
         background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     }
 
     svg {
-      width: 15px;
-      height: 15px;
+      width: 12px;
+      height: 12px;
       flex: none;
     }
 
@@ -537,21 +565,23 @@ body {
       color: var(--au-accent);
 
       .au-tri {
-        background: rgba(86, 111, 224, 0.20);
-        box-shadow: 0 4px 12px rgba(72, 82, 118, 0.16);
+        background: #fff;
+        border-color: var(--au-accent);
+        box-shadow: 0 4px 16px rgba(72, 82, 118, 0.32);
       }
     }
 
     &:active .au-tri {
-      transform: scale(0.94);
+      transform: rotate(var(--au-rot, 0deg)) scale(0.94);
     }
   }
 
-  // 展开态：箭头反向（指向左），位置与图标轨道一致
+  // 展开态：箭头反向（指向左）
   &.au-nav-expand .au-nav-toggle {
+    color: var(--au-accent);
+
     .au-tri {
-      transform: rotate(180deg);
-      background: rgba(86, 111, 224, 0.16);
+      --au-rot: 180deg;
     }
   }
 }
