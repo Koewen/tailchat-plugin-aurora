@@ -21,8 +21,8 @@
   "label": "Aurora Glass Theme",
   "label.zh-CN": "流光玻璃主题",
   "name": "com.koewen.theme.aurora",
-  "url": "https://fastly.jsdelivr.net/gh/Koewen/tailchat-plugin-aurora@v1.2.0/plugins/com.koewen.theme.aurora/index.js",
-  "version": "1.2.0",
+  "url": "https://fastly.jsdelivr.net/gh/Koewen/tailchat-plugin-aurora@v1.3.0/plugins/com.koewen.theme.aurora/index.js",
+  "version": "1.3.0",
   "author": "Koewen",
   "description": "Glassmorphism with flowing aurora animated background",
   "description.zh-CN": "玻璃拟态 + 流光溢彩动效背景",
@@ -34,7 +34,7 @@
 4. 进入 **系统设置 → 外观 → 主题**，选择 **流光玻璃(亮色)** 或 **流光玻璃(暗色)** 即可生效。
 
 > `url` 走 jsDelivr CDN（国内可达）。若你的网络环境更适合其他 CDN，可将 `url` 替换为：
-> `https://cdn.jsdelivr.net/gh/Koewen/tailchat-plugin-aurora@v1.2.0/plugins/com.koewen.theme.aurora/index.js`
+> `https://cdn.jsdelivr.net/gh/Koewen/tailchat-plugin-aurora@v1.3.0/plugins/com.koewen.theme.aurora/index.js`
 
 ### 方式二：写入实例 registry.json（全体用户可见）
 

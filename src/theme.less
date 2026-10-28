@@ -10,9 +10,9 @@
   --au-base: #f6f4ef;            // 乳白基底
   --au-surface: rgba(255, 255, 255, 0.72);   // 卡片玻璃
   --au-surface-strong: rgba(255, 255, 255, 0.88);
-  --au-navbar: rgba(252, 251, 248, 0.92);
-  --au-sidebar: rgba(250, 248, 243, 0.78);
-  --au-content: rgba(255, 255, 255, 0.30);
+  --au-navbar: rgba(252, 251, 248, 0.82);
+  --au-sidebar: rgba(250, 248, 243, 0.60);
+  --au-content: rgba(255, 255, 255, 0.18);
   --au-ink: #2c313b;             // 主文字（墨色）
   --au-ink-2: #5c6470;           // 次级文字
   --au-ink-3: #8a919d;           // 弱化文字
@@ -27,7 +27,7 @@
   color: var(--au-ink);
   background-color: var(--au-base);
 
-  // ---------- 透明流光溢彩背景（两层，均低透明度） ----------
+  // ---------- 透明流光溢彩背景（明显动效版） ----------
   // 关键：绝不能改根节点 position（会覆盖 absolute inset-0 导致高度塔陷）；
   // 用 isolation 建立堆叠上下文，伪层 z-index:-1 垫在内容之下、乳白底之上。
   isolation: isolate;
@@ -39,26 +39,27 @@
     inset: -30%;
     z-index: -1;
     pointer-events: none;
-    will-change: transform;
+    will-change: transform, opacity;
   }
 
-  // 层1：柔彩光斑缓慢漂移（马卡龙色系，模糊大、透明度高 Retina 友好）
+  // 层1：柔彩光斑大幅漂移 + 色相流动（马卡龙浅色系，动效明显）
   &::before {
-    opacity: 0.55;
-    filter: blur(90px);
+    opacity: 0.72;
+    filter: blur(80px);
     background:
       radial-gradient(38% 42% at 16% 24%, #ffd9c2 0%, rgba(255, 217, 194, 0) 70%),
       radial-gradient(34% 38% at 84% 18%, #c3dcff 0%, rgba(195, 220, 255, 0) 70%),
       radial-gradient(40% 44% at 70% 78%, #bfeeda 0%, rgba(191, 238, 218, 0) 70%),
       radial-gradient(30% 34% at 28% 72%, #e3c8ff 0%, rgba(227, 200, 255, 0) 70%),
       radial-gradient(26% 30% at 52% 40%, #ffd3e2 0%, rgba(255, 211, 226, 0) 70%);
-    animation: au-drift 36s ease-in-out infinite alternate;
+    animation: au-drift 22s ease-in-out infinite alternate,
+      au-hue 18s ease-in-out infinite;
   }
 
-  // 层2：虹彩流光薄纱（极低透明度，缓慢旋转 + 轻微色相流动）
+  // 层2：虹彩流光薄纱（缓慢旋转 + 呼吸明暗）
   &::after {
-    opacity: 0.10;
-    filter: blur(70px);
+    opacity: 0.18;
+    filter: blur(64px);
     background: conic-gradient(
       from 210deg at 60% 45%,
       rgba(255, 217, 194, 0.9),
@@ -68,7 +69,7 @@
       rgba(255, 211, 226, 0.9),
       rgba(255, 217, 194, 0.9)
     );
-    animation: au-sheen 60s linear infinite;
+    animation: au-sheen 36s linear infinite;
   }
 
   // 内容层无需人为抬升（伪层已是 z-index:-1，自然垫底）
@@ -147,7 +148,7 @@
   // ---------- 聊天输入框 ----------
   [class*='ChatInputBox'] .bg-white,
   .bg-white.dark\:bg-gray-600 {
-    background: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(255, 255, 255, 0.62) !important;
     border: 1px solid var(--au-line);
     border-radius: 12px;
     box-shadow: var(--au-shadow);
@@ -176,14 +177,20 @@
 
   // ---------- 动效 ----------
   @keyframes au-drift {
-    0%   { transform: translate3d(-2.5%, -1.5%, 0) scale(1) rotate(0deg); }
-    50%  { transform: translate3d(2.5%, 2%, 0) scale(1.10) rotate(6deg); }
-    100% { transform: translate3d(-1.5%, 2.5%, 0) scale(1.03) rotate(-4deg); }
+    0%   { transform: translate3d(-6%, -4%, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate3d(5%, 5%, 0) scale(1.20) rotate(10deg); }
+    100% { transform: translate3d(-4%, 6%, 0) scale(1.06) rotate(-8deg); }
+  }
+
+  @keyframes au-hue {
+    0%, 100% { filter: blur(80px) hue-rotate(0deg); }
+    50%      { filter: blur(95px) hue-rotate(24deg); }
   }
 
   @keyframes au-sheen {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(180deg) scale(1.08); }
+    to   { transform: rotate(360deg) scale(1); }
   }
 }
 
@@ -277,28 +284,24 @@ body {
 }
 
 // ---------- 设置页（FullModal 全屏容器） ----------
+// ⚠️ 铁律：modal 链路内禁止 backdrop-filter —— 它会把内层 position:fixed
+//    的 SettingsView 定位基准劫持到小容器上，导致面板塔缩不可见。
 #tailchat-app.tailchat-app.theme-aurora {
   .fixed.bg-content-light,
   .fixed.bg-content-dark {
-    background: rgba(248, 246, 241, 0.90) !important;
-    backdrop-filter: blur(26px) saturate(150%);
-    -webkit-backdrop-filter: blur(26px) saturate(150%);
+    background: rgba(248, 246, 241, 0.88) !important;
   }
 
   // 弹窗容器（含设置弹窗、各类 Modal）
   .modal-inner {
-    background: rgba(252, 251, 248, 0.94) !important;
-    backdrop-filter: blur(22px) saturate(150%);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    background: rgba(252, 251, 248, 0.88) !important;
     border: 1px solid var(--au-line);
     border-radius: 18px !important;
     box-shadow: var(--au-shadow-lg) !important;
   }
 
   [data-tc-role='modal-mask'] {
-    background: rgba(30, 34, 48, 0.42) !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(30, 34, 48, 0.38) !important;
   }
 
   // 设置行标题弱化色
@@ -323,9 +326,9 @@ body {
   --au-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
   --au-shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.45);
 
-  // 光斑更含蓄
-  &::before { opacity: 0.20; filter: blur(100px); }
-  &::after { opacity: 0.07; }
+  // 光斑动效同步加强
+  &::before { opacity: 0.30; filter: blur(90px); }
+  &::after { opacity: 0.12; }
 
   .text-typography-light,
   .text-typography-dark { color: var(--au-ink) !important; }
