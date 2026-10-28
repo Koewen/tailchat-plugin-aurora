@@ -129,9 +129,13 @@ function startNavbar(){
   function isOn(){ var a=appEl(); return !!(a&&a.classList.contains('au-nav-expand')); }
   function apply(on){
     var a=appEl(); if(!a) return;
-    if(on) a.classList.add('au-nav-expand'); else a.classList.remove('au-nav-expand');
+    a.classList.toggle('au-nav-expand', !!on);
     var b=document.querySelector('.au-nav-toggle');
-    if(b){ b.textContent=on?'\\u00AB':'\\u00BB'; b.title=on?'\\u6536\\u8D77\\u4FA7\\u680F':'\\u5C55\\u5F00\\u4FA7\\u680F'; }
+    if(b){
+      b.title=on?'收起侧边栏':'展开侧边栏';
+      b.setAttribute('aria-label',on?'收起侧边栏':'展开侧边栏');
+      b.setAttribute('aria-expanded',on?'true':'false');
+    }
   }
   function toggle(){
     var on=!isOn();
@@ -169,17 +173,21 @@ function startNavbar(){
       it.appendChild(l);
     }
   }
+  var ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 5 7 12 14 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>';
   function ensureBtn(){
-    var host=document.querySelector('[data-tc-role="navbar-settings"]');
+    var host=document.querySelector('[data-tc-role="navbar-settings"]')||document.querySelector('[data-tc-role="navbar"]');
     if(!host) return;
-    if(!host.querySelector('.au-nav-toggle')){
-      var b=document.createElement('div');
+    var b=host.querySelector('.au-nav-toggle');
+    if(!b){
+      b=document.createElement('button');
       b.className='au-nav-toggle';
-      b.textContent='\\u00BB';
-      b.onclick=toggle;
-      host.insertBefore(b,host.firstChild);
-      apply(isOn());
+      b.setAttribute('type','button');
+      b.setAttribute('data-tc-role','au-nav-toggle');
+      b.innerHTML=ICON;
+      b.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); toggle(); };
+      host.appendChild(b);
     }
+    apply(isOn());
   }
   function fetchNames(){
     try{

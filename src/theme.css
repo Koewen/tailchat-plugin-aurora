@@ -408,6 +408,21 @@ body .ant-tooltip-inner {
 #tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] {
   transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12 {
+  width: 40px !important;
+  height: 40px !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .ant-avatar {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 15px !important;
+  line-height: 40px !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .ant-avatar > img {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover;
+}
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar'] {
   width: 212px !important;
   align-items: flex-start;
@@ -446,24 +461,41 @@ body .ant-tooltip-inner {
   color: var(--au-accent);
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle {
-  width: 40px;
+  width: 36px;
   height: 36px;
-  margin: 2px auto 0;
-  border-radius: 10px;
+  margin-top: 6px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
-  letter-spacing: -2px;
-  color: var(--au-ink-3);
-  background: transparent;
+  color: var(--au-accent);
+  background: rgba(86, 111, 224, 0.12);
+  border: 1px solid rgba(86, 111, 224, 0.26);
+  box-shadow: 0 2px 10px rgba(72, 82, 118, 0.1);
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s ease, color 0.2s ease;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+#tailchat-app.tailchat-app.theme-aurora .au-nav-toggle svg {
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle:hover {
-  background: rgba(86, 111, 224, 0.1);
-  color: var(--au-accent);
+  background: rgba(86, 111, 224, 0.2);
+  color: var(--au-accent-2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(72, 82, 118, 0.16);
+}
+#tailchat-app.tailchat-app.theme-aurora .au-nav-toggle:active {
+  transform: translateY(0);
+}
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-toggle {
+  margin-left: 0;
+  background: rgba(86, 111, 224, 0.16);
+}
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-toggle svg {
+  transform: rotate(180deg);
 }
 @media (prefers-reduced-motion: reduce) {
   #tailchat-app.tailchat-app.theme-aurora::before,
