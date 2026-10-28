@@ -1,120 +1,379 @@
-#tailchat-app.theme-aurora {
-  --tc-primary-color: #6aa3ff;
-  --glass-bg: rgba(255, 255, 255, 0.14);
-  --glass-bg-strong: rgba(255, 255, 255, 0.24);
-  --glass-bd: rgba(255, 255, 255, 0.3);
-  --glass-blur: 18px;
-  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+// ============================================================
+// Tailchat 流光玻璃主题 v1.1.0 — 乳白底 · 透明流光溢彩
+// 结构：设计令牌 → 极光背景 → 表面 → 排版 → 卡片 → 输入 →
+//       Ant Design 组件 → 弹窗/设置页 → 滚动条/选区 → 暗色档
+// ============================================================
 
-  /* ---------- 流光溢彩动效背景 ---------- */
+// ---------- 根：设计令牌（亮色档默认） ----------
+#tailchat-app.tailchat-app.theme-aurora {
+  // 乳白基底与表面
+  --au-base: #f6f4ef;            // 乳白基底
+  --au-surface: rgba(255, 255, 255, 0.72);   // 卡片玻璃
+  --au-surface-strong: rgba(255, 255, 255, 0.88);
+  --au-navbar: rgba(252, 251, 248, 0.92);
+  --au-sidebar: rgba(250, 248, 243, 0.78);
+  --au-content: rgba(255, 255, 255, 0.30);
+  --au-ink: #2c313b;             // 主文字（墨色）
+  --au-ink-2: #5c6470;           // 次级文字
+  --au-ink-3: #8a919d;           // 弱化文字
+  --au-line: rgba(44, 49, 59, 0.08);          // 发丝分割线
+  --au-accent: #566fe0;          // 主色（雾蓝紫）
+  --au-accent-2: #8b6cf7;
+  --au-ring: rgba(86, 111, 224, 0.28);
+  --au-shadow: 0 6px 22px rgba(72, 82, 118, 0.10);
+  --au-shadow-lg: 0 16px 44px rgba(72, 82, 118, 0.16);
+  --au-blur: 16px;
+
+  color: var(--au-ink);
+  background-color: var(--au-base);
+
+  // ---------- 透明流光溢彩背景（两层，均低透明度） ----------
   position: relative;
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
     position: fixed;
-    inset: -25%;
+    inset: -30%;
     z-index: 0;
     pointer-events: none;
+    will-change: transform;
   }
 
-  /* 极光光斑缓慢漂移 */
-  &:before {
-    filter: blur(70px);
-    opacity: 0.7;
+  // 层1：柔彩光斑缓慢漂移（马卡龙色系，模糊大、透明度高 Retina 友好）
+  &::before {
+    opacity: 0.55;
+    filter: blur(90px);
     background:
-      radial-gradient(circle at 18% 28%, #5b8cff 0, transparent 42%),
-      radial-gradient(circle at 82% 22%, #b06cff 0, transparent 42%),
-      radial-gradient(circle at 55% 82%, #34d3ff 0, transparent 46%),
-      radial-gradient(circle at 30% 70%, #ff7ac6 0, transparent 40%);
-    animation: aurora-drift 26s ease-in-out infinite alternate;
+      radial-gradient(38% 42% at 16% 24%, #ffd9c2 0%, rgba(255, 217, 194, 0) 70%),
+      radial-gradient(34% 38% at 84% 18%, #c3dcff 0%, rgba(195, 220, 255, 0) 70%),
+      radial-gradient(40% 44% at 70% 78%, #bfeeda 0%, rgba(191, 238, 218, 0) 70%),
+      radial-gradient(30% 34% at 28% 72%, #e3c8ff 0%, rgba(227, 200, 255, 0) 70%),
+      radial-gradient(26% 30% at 52% 40%, #ffd3e2 0%, rgba(255, 211, 226, 0) 70%);
+    animation: au-drift 36s ease-in-out infinite alternate;
   }
 
-  /* 旋转流光叠加 */
-  &:after {
-    opacity: 0.28;
-    filter: blur(60px);
+  // 层2：虹彩流光薄纱（极低透明度，缓慢旋转 + 轻微色相流动）
+  &::after {
+    opacity: 0.10;
+    filter: blur(70px);
     background: conic-gradient(
-      from 0deg,
-      rgba(91, 140, 255, 0.45),
-      rgba(176, 108, 255, 0.45),
-      rgba(52, 211, 255, 0.45),
-      rgba(255, 122, 198, 0.4),
-      rgba(91, 140, 255, 0.45)
+      from 210deg at 60% 45%,
+      rgba(255, 217, 194, 0.9),
+      rgba(195, 220, 255, 0.9),
+      rgba(191, 238, 218, 0.9),
+      rgba(227, 200, 255, 0.9),
+      rgba(255, 211, 226, 0.9),
+      rgba(255, 217, 194, 0.9)
     );
-    animation: aurora-spin 45s linear infinite;
+    animation: au-sheen 60s linear infinite;
   }
 
-  @keyframes aurora-drift {
-    0% { transform: translate3d(-3%, -2%, 0) scale(1); }
-    50% { transform: translate3d(3%, 2%, 0) scale(1.12); }
-    100% { transform: translate3d(-2%, 3%, 0) scale(1.04); }
-  }
-  @keyframes aurora-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+  // 内容层抬升到背景之上
+  > * {
+    position: relative;
+    z-index: 1;
   }
 
-  /* 内容层需在背景之上 */
-  > * { position: relative; z-index: 1; }
-
-  /* ---------- 玻璃拟态 ---------- */
+  // ---------- 表面：导航栏 / 侧栏 / 内容区 ----------
   .bg-navbar-light,
-  .bg-navbar-dark,
+  .bg-navbar-dark {
+    background: var(--au-navbar) !important;
+    backdrop-filter: blur(var(--au-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--au-blur)) saturate(150%);
+    box-shadow: inset -1px 0 0 var(--au-line);
+  }
+
   .bg-sidebar-light,
-  .bg-sidebar-dark,
-  [class*='bg-content-'],
-  [data-tc-role^='content-'] {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(var(--glass-blur)) saturate(170%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
-    border: 1px solid var(--glass-bd);
-    box-shadow: var(--glass-shadow);
+  .bg-sidebar-dark {
+    background: var(--au-sidebar) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: inset -1px 0 0 var(--au-line);
   }
 
-  /* 消息气泡 / 卡片 / 面板 / 输入框 */
-  .chat-message-item,
-  .message-item,
-  [data-tc-role='message'],
-  .el-card,
-  .el-input__wrapper,
-  .el-textarea__inner,
-  .el-dropdown-menu,
-  .el-dialog,
-  .el-popover,
-  .plugin-panel,
-  [class*='panel-'] {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px) saturate(160%);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    border: 1px solid var(--glass-bd) !important;
-    box-shadow: var(--glass-shadow);
+  .bg-content-light,
+  .bg-content-dark {
+    background: var(--au-content) !important;
+  }
+
+  // ---------- 排版：统一墨色体系 ----------
+  .text-typography-light,
+  .text-typography-dark {
+    color: var(--au-ink) !important;
+  }
+
+  .text-gray-700,
+  .text-gray-800,
+  .text-gray-900,
+  .text-black {
+    color: var(--au-ink);
+  }
+
+  .text-gray-600 { color: var(--au-ink-2); }
+  .text-gray-500,
+  .text-gray-400 { color: var(--au-ink-3); }
+
+  // 主色文字（链接 / 高亮）
+  .text-blue-500,
+  .text-indigo-500 {
+    color: var(--au-accent);
+  }
+
+  // ---------- 卡片：消息气泡 / 面板 ----------
+  .chat-message-item {
+    background: var(--au-surface) !important;
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    border: 1px solid var(--au-line) !important;
     border-radius: 14px;
+    box-shadow: var(--au-shadow);
+    transition: background-color 0.22s ease, box-shadow 0.22s ease,
+      transform 0.22s ease;
+
+    &:hover {
+      background: var(--au-surface-strong) !important;
+      box-shadow: var(--au-shadow-lg);
+    }
+
+    // 引用块
+    .chat-message-item_quote {
+      border-color: rgba(86, 111, 224, 0.35) !important;
+      background: rgba(86, 111, 224, 0.05);
+      border-radius: 6px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
   }
 
-  /* 按钮与高亮元素：玻璃高光 */
-  .el-button:not(.el-button--text):not(.is-link),
-  [class*='btn-'] {
-    background: var(--glass-bg-strong) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-bd) !important;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  // 通用白底容器（如成员面板头部等）
+  .bg-white {
+    background: var(--au-surface-strong) !important;
   }
-  .el-button:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(31, 38, 135, 0.22); }
 
-  /* 滚动条弱化，突出玻璃感 */
+  // ---------- 聊天输入框 ----------
+  [class*='ChatInputBox'] .bg-white,
+  .bg-white.dark\:bg-gray-600 {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid var(--au-line);
+    border-radius: 12px;
+    box-shadow: var(--au-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-within {
+      border-color: rgba(86, 111, 224, 0.45);
+      box-shadow: 0 0 0 3px var(--au-ring), var(--au-shadow);
+    }
+  }
+
+  // ---------- 滚动条 / 选区 ----------
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: var(--glass-bg-strong);
+    background: rgba(90, 100, 130, 0.22);
     border-radius: 8px;
+    &:hover { background: rgba(90, 100, 130, 0.36); }
+  }
+
+  ::selection {
+    background: rgba(86, 111, 224, 0.20);
+  }
+
+  // ---------- 动效 ----------
+  @keyframes au-drift {
+    0%   { transform: translate3d(-2.5%, -1.5%, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate3d(2.5%, 2%, 0) scale(1.10) rotate(6deg); }
+    100% { transform: translate3d(-1.5%, 2.5%, 0) scale(1.03) rotate(-4deg); }
+  }
+
+  @keyframes au-sheen {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
 }
 
-/* 暗色档：加深玻璃底色、提高发光对比 */
-#tailchat-app.theme-aurora.dark,
-#tailchat-app.dark.theme-aurora {
-  --glass-bg: rgba(16, 20, 40, 0.32);
-  --glass-bg-strong: rgba(20, 26, 50, 0.5);
-  --glass-bd: rgba(255, 255, 255, 0.16);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+// ---------- Ant Design 组件（挂载在 body 下的弹层需全局选择器） ----------
+.theme-aurora-antd() {
+  .ant-btn {
+    border-radius: 10px;
+    border: 1px solid var(--au-line, rgba(44, 49, 59, 0.08));
+    box-shadow: 0 2px 8px rgba(72, 82, 118, 0.06);
+    transition: all 0.18s ease;
+
+    &:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text) {
+      background: rgba(255, 255, 255, 0.85);
+      color: #3a4150;
+      &:hover {
+        color: #566fe0;
+        border-color: rgba(86, 111, 224, 0.45);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(72, 82, 118, 0.12);
+      }
+    }
+
+    &.ant-btn-primary {
+      background: linear-gradient(135deg, #5f7cff 0%, #8b6cf7 100%);
+      border: none;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(101, 116, 245, 0.35);
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 22px rgba(101, 116, 245, 0.45);
+        filter: brightness(1.06);
+      }
+    }
+  }
+
+  .ant-input,
+  .ant-input-number,
+  textarea.ant-input {
+    border-radius: 10px !important;
+    border-color: rgba(44, 49, 59, 0.12) !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    transition: all 0.2s ease;
+    &:hover { border-color: rgba(86, 111, 224, 0.4) !important; }
+    &:focus,
+    &.ant-input-focused {
+      border-color: #566fe0 !important;
+      box-shadow: 0 0 0 3px rgba(86, 111, 224, 0.16) !important;
+    }
+  }
+
+  .ant-select-selector {
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-color: rgba(44, 49, 59, 0.12) !important;
+  }
+
+  .ant-select-focused .ant-select-selector,
+  .ant-select-open .ant-select-selector {
+    border-color: #566fe0 !important;
+    box-shadow: 0 0 0 3px rgba(86, 111, 224, 0.16) !important;
+  }
+
+  .ant-switch {
+    &.ant-switch-checked {
+      background: linear-gradient(135deg, #5f7cff, #8b6cf7);
+    }
+  }
+
+  .ant-modal-content,
+  .ant-popover-inner,
+  .ant-dropdown-menu,
+  .ant-select-dropdown {
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(44, 49, 59, 0.08);
+    box-shadow: 0 18px 50px rgba(60, 70, 110, 0.18) !important;
+  }
+
+  .ant-tooltip-inner {
+    border-radius: 10px;
+    background: rgba(44, 49, 59, 0.94);
+  }
+}
+
+// 挂载：主题生效期间全局可用（类名打在 body 上由运行时控制不可行，直接全局生效）
+#tailchat-app.tailchat-app.theme-aurora,
+body {
+  .theme-aurora-antd();
+}
+
+// ---------- 设置页（FullModal 全屏容器） ----------
+#tailchat-app.tailchat-app.theme-aurora {
+  .fixed.bg-content-light,
+  .fixed.bg-content-dark {
+    background: rgba(248, 246, 241, 0.90) !important;
+    backdrop-filter: blur(26px) saturate(150%);
+    -webkit-backdrop-filter: blur(26px) saturate(150%);
+  }
+
+  // 弹窗容器（含设置弹窗、各类 Modal）
+  .modal-inner {
+    background: rgba(252, 251, 248, 0.94) !important;
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    border: 1px solid var(--au-line);
+    border-radius: 18px !important;
+    box-shadow: var(--au-shadow-lg) !important;
+  }
+
+  [data-tc-role='modal-mask'] {
+    background: rgba(30, 34, 48, 0.42) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  // 设置行标题弱化色
+  .text-xs.text-gray-400 { color: var(--au-ink-3) !important; }
+}
+
+// ---------- 暗色档：墨夜流光 ----------
+#tailchat-app.tailchat-app.theme-aurora.dark,
+#tailchat-app.tailchat-app.dark.theme-aurora {
+  --au-base: #12141d;
+  --au-surface: rgba(32, 36, 52, 0.62);
+  --au-surface-strong: rgba(40, 45, 64, 0.82);
+  --au-navbar: rgba(19, 22, 33, 0.92);
+  --au-sidebar: rgba(17, 20, 30, 0.78);
+  --au-content: rgba(26, 30, 44, 0.42);
+  --au-ink: #e8eaf2;
+  --au-ink-2: #b6bcc9;
+  --au-ink-3: #7f8695;
+  --au-line: rgba(255, 255, 255, 0.08);
+  --au-accent: #7d94ff;
+  --au-ring: rgba(125, 148, 255, 0.30);
+  --au-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  --au-shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.45);
+
+  // 光斑更含蓄
+  &::before { opacity: 0.20; filter: blur(100px); }
+  &::after { opacity: 0.07; }
+
+  .text-typography-light,
+  .text-typography-dark { color: var(--au-ink) !important; }
+
+  .text-gray-700, .text-gray-800, .text-gray-900 { color: var(--au-ink); }
+  .text-gray-600 { color: var(--au-ink-2); }
+  .text-gray-500, .text-gray-400 { color: var(--au-ink-3); }
+
+  .chat-message-item:hover {
+    background: var(--au-surface-strong) !important;
+  }
+
+  .bg-white.dark\:bg-gray-600 {
+    background: rgba(38, 43, 61, 0.85) !important;
+    &:focus-within { border-color: rgba(125, 148, 255, 0.5); }
+  }
+
+  .fixed.bg-content-light,
+  .fixed.bg-content-dark {
+    background: rgba(16, 18, 27, 0.92) !important;
+  }
+
+  .modal-inner {
+    background: rgba(24, 27, 40, 0.94) !important;
+  }
+
+  [data-tc-role='modal-mask'] {
+    background: rgba(0, 0, 0, 0.55) !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    &:hover { background: rgba(255, 255, 255, 0.24); }
+  }
+
+  ::selection { background: rgba(125, 148, 255, 0.30); }
+}
+
+// ---------- 无障碍：减少动态时停用流光 ----------
+@media (prefers-reduced-motion: reduce) {
+  #tailchat-app.tailchat-app.theme-aurora {
+    &::before, &::after { animation: none; }
+  }
 }
