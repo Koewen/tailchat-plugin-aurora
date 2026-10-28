@@ -9,6 +9,8 @@
   // 乳白基底与表面
   --au-base: #f6f4ef;            // 乳白基底
   --au-surface: rgba(255, 255, 255, 0.72);   // 卡片玻璃
+  --au-bubble: rgba(255, 255, 255, 0.66);          // 他人消息气泡
+  --au-bubble-self: rgba(255, 255, 255, 0.80);     // 自己消息气泡底
   --au-surface-strong: rgba(255, 255, 255, 0.88);
   --au-navbar: rgba(252, 251, 248, 0.82);
   --au-sidebar: rgba(250, 248, 243, 0.60);
@@ -119,24 +121,69 @@
     color: var(--au-accent);
   }
 
-  // ---------- 卡片：消息气泡 / 面板 ----------
-  // 消息默认透明（避免满屏白块），悬浮时轻提示；引用块玻璃化
+  // ---------- 聊天气泡：左右分栏 + 独立卡片 ----------
+  // 行结构: .chat-message-item > [头像列, 主体列(昵称/内容/反应)]
+  // JS(入口) 按 JWT 昵称/头像给行打 .msg-self / .msg-other 标记
   .chat-message-item {
+    row-gap: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     border-radius: 12px;
-    transition: background-color 0.18s ease, box-shadow 0.18s ease;
+    transition: background-color 0.18s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.45);
-      box-shadow: 0 2px 12px rgba(72, 82, 118, 0.06);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    // 主体列 → 气泡卡片
+    > div:nth-child(2) {
+      flex: initial !important;
+      width: fit-content;
+      max-width: min(80%, 640px);
+      background: var(--au-bubble);
+      border: 1px solid var(--au-line);
+      border-radius: 4px 16px 16px 16px;
+      padding: 6px 14px 10px;
+      box-shadow: var(--au-shadow);
+      overflow: visible !important;
+
+      // 宽媒体不撑破气泡
+      img, video, pre, code {
+        max-width: 100%;
+      }
+      pre, code {
+        overflow-x: auto;
+      }
     }
 
     // 引用块
     .chat-message-item_quote {
       border-color: rgba(86, 111, 224, 0.35) !important;
       background: rgba(86, 111, 224, 0.05);
-      border-radius: 6px;
+      border-radius: 8px;
       padding-top: 2px;
       padding-bottom: 2px;
+    }
+
+    // 自己的消息：靠右 + 主题色渐变浅底
+    &.msg-self {
+      flex-direction: row-reverse;
+
+      > div:nth-child(2) {
+        background: linear-gradient(
+            135deg,
+            rgba(95, 124, 255, 0.16),
+            rgba(139, 108, 247, 0.10)
+          ),
+          var(--au-bubble-self);
+        border-color: rgba(86, 111, 224, 0.28);
+        border-radius: 16px 4px 16px 16px;
+      }
+
+      // 昵称/时间行右对齐
+      > div:nth-child(2) > .flex.items-center {
+        justify-content: flex-end;
+      }
     }
   }
 
@@ -313,6 +360,8 @@ body {
 #tailchat-app.tailchat-app.dark.theme-aurora {
   --au-base: #12141d;
   --au-surface: rgba(32, 36, 52, 0.62);
+  --au-bubble: rgba(38, 43, 61, 0.72);
+  --au-bubble-self: rgba(46, 52, 76, 0.86);
   --au-surface-strong: rgba(40, 45, 64, 0.82);
   --au-navbar: rgba(19, 22, 33, 0.92);
   --au-sidebar: rgba(17, 20, 30, 0.78);
