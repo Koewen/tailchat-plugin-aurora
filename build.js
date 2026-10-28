@@ -135,8 +135,6 @@ function startNavbar(){
       b.title=on?'收起侧边栏':'展开侧边栏';
       b.setAttribute('aria-label',on?'收起侧边栏':'展开侧边栏');
       b.setAttribute('aria-expanded',on?'true':'false');
-      var tx=b.querySelector('.au-nav-toggle-text');
-      if(tx) tx.textContent=on?'收起':'展开';
     }
   }
   function toggle(){
@@ -175,7 +173,7 @@ function startNavbar(){
       it.appendChild(l);
     }
   }
-  var ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 5 7 12 14 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>';
+  var ICON='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8.4 4.2 16.8 12 8.4 19.8V4.2z"/></svg>';
   function ensureBtn(){
     var nav=document.querySelector('[data-tc-role="navbar"]');
     if(!nav) return;
@@ -185,7 +183,7 @@ function startNavbar(){
       b.className='au-nav-toggle';
       b.setAttribute('type','button');
       b.setAttribute('data-tc-role','au-nav-toggle');
-      b.innerHTML=ICON+'<span class="au-nav-toggle-text"></span>';
+      b.innerHTML='<span class="au-tri">'+ICON+'</span>';
       b.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); toggle(); };
       // 置于导航栏顶部，首屏即可见（不再藏在底部设置区）
       nav.insertBefore(b, nav.firstChild);
