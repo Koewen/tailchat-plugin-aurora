@@ -188,7 +188,7 @@ function startNavbar(){
 e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u4EAE\u8272)",name:"light+aurora"});e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u6697\u8272)",name:"dark+aurora"});
 e.sharedEvent.on("loadColorScheme",function(u){
   if(u==="light+aurora"||u==="dark+aurora"){
-    new Promise(function(a,o){r(["./theme-5173adf2.js"],a,o)});
+    new Promise(function(a,o){r(["./theme-fa0b1ba5.js"],a,o)});
     startBubbles();
     startNavbar();
   }

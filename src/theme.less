@@ -390,6 +390,17 @@ body {
     background: rgba(255, 255, 255, 0.05);
   }
 
+  // 快捷圆钮暗色档（hover 不用纯白）
+  [data-tc-role='navbar'] {
+    .w-12.bg-gray-700,
+    .w-12.bg-green-500 {
+      background-color: rgba(56, 62, 84, 0.9) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+
+      &:hover { background-color: rgba(72, 80, 108, 0.95) !important; }
+    }
+  }
+
   .bg-white.dark\:bg-gray-600 {
     background: rgba(38, 43, 61, 0.85) !important;
     &:focus-within { border-color: rgba(125, 148, 255, 0.5); }
@@ -416,7 +427,7 @@ body {
   ::selection { background: rgba(125, 148, 255, 0.30); }
 }
 
-// ---------- 导航栏：收缩/展开（v1.7.1：右缘居中悬浮手柄 + 紧凑间距） ----------
+// ---------- 导航栏：收缩/展开（v1.7.2：快捷圆钮玻璃化 + iconify 图标统一） ----------
 #tailchat-app.tailchat-app.theme-aurora {
   [data-tc-role='navbar'] {
     position: relative; // 悬浮手柄的定位基准
@@ -444,6 +455,48 @@ body {
     .anticon {
       font-size: 22px !important;
       line-height: 1 !important;
+    }
+
+    // ---- v1.7.2 快捷圆钮（收件箱 / 快速搜索 / 添加群组）----
+    // 默认样式是 bg-gray-700 / bg-green-500 实底 48px 圆 + 30px iconify svg，
+    // 与 40px 群头像体系割裂。处理：
+    //   ① background-clip:content-box + 4px padding → 视觉圆缩到 40px，
+    //      .w-12 布局盒保持 48px（铁律：不动布局盒，命中中心仍 x=36）
+    //   ② 深灰/绿色实底 → 玻璃白钮，图标 22px 墨色
+    .w-12.bg-gray-700,
+    .w-12.bg-green-500 {
+      background: var(--au-surface-strong) !important;
+      background-clip: content-box !important;
+      padding: 4px !important;
+      box-shadow: 0 2px 8px rgba(72, 82, 118, 0.12);
+      transition: background-color 0.18s ease;
+
+      > svg.iconify {
+        color: var(--au-ink-2) !important;
+        font-size: 22px !important;
+        width: 22px !important;
+        height: 22px !important;
+      }
+
+      &:hover {
+        background-color: #fff !important;
+
+        > svg.iconify { color: var(--au-accent) !important; }
+      }
+    }
+
+    // 添加群组钮保留一点主色倾向，便于与功能性圆钮区分
+    .w-12.bg-green-500 > svg.iconify { color: var(--au-accent) !important; }
+
+    // 底部设置区 iconify 图标（此前 30px 未被 .anticon 规则覆盖）
+    [data-tc-role='navbar-settings'] > svg.iconify {
+      color: var(--au-ink-3) !important;
+      font-size: 22px !important;
+      width: 22px !important;
+      height: 22px !important;
+      transition: color 0.15s ease;
+
+      &:hover { color: var(--au-accent) !important; }
     }
   }
 

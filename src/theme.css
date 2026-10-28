@@ -371,6 +371,19 @@ body .ant-tooltip-inner {
 #tailchat-app.tailchat-app.dark.theme-aurora .chat-message-item:hover {
   background: rgba(255, 255, 255, 0.05);
 }
+#tailchat-app.tailchat-app.theme-aurora.dark [data-tc-role='navbar'] .w-12.bg-gray-700,
+#tailchat-app.tailchat-app.dark.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700,
+#tailchat-app.tailchat-app.theme-aurora.dark [data-tc-role='navbar'] .w-12.bg-green-500,
+#tailchat-app.tailchat-app.dark.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500 {
+  background-color: rgba(56, 62, 84, 0.9) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+#tailchat-app.tailchat-app.theme-aurora.dark [data-tc-role='navbar'] .w-12.bg-gray-700:hover,
+#tailchat-app.tailchat-app.dark.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700:hover,
+#tailchat-app.tailchat-app.theme-aurora.dark [data-tc-role='navbar'] .w-12.bg-green-500:hover,
+#tailchat-app.tailchat-app.dark.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500:hover {
+  background-color: rgba(72, 80, 108, 0.95) !important;
+}
 #tailchat-app.tailchat-app.theme-aurora.dark .bg-white.dark\:bg-gray-600,
 #tailchat-app.tailchat-app.dark.theme-aurora .bg-white.dark\:bg-gray-600 {
   background: rgba(38, 43, 61, 0.85) !important;
@@ -423,6 +436,42 @@ body .ant-tooltip-inner {
 #tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .anticon {
   font-size: 22px !important;
   line-height: 1 !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700,
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500 {
+  background: var(--au-surface-strong) !important;
+  background-clip: content-box !important;
+  padding: 4px !important;
+  box-shadow: 0 2px 8px rgba(72, 82, 118, 0.12);
+  transition: background-color 0.18s ease;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700 > svg.iconify,
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500 > svg.iconify {
+  color: var(--au-ink-2) !important;
+  font-size: 22px !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700:hover,
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500:hover {
+  background-color: #fff !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-gray-700:hover > svg.iconify,
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500:hover > svg.iconify {
+  color: var(--au-accent) !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] .w-12.bg-green-500 > svg.iconify {
+  color: var(--au-accent) !important;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] [data-tc-role='navbar-settings'] > svg.iconify {
+  color: var(--au-ink-3) !important;
+  font-size: 22px !important;
+  width: 22px !important;
+  height: 22px !important;
+  transition: color 0.15s ease;
+}
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar'] [data-tc-role='navbar-settings'] > svg.iconify:hover {
+  color: var(--au-accent) !important;
 }
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar'] {
   width: 212px !important;
