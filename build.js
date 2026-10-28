@@ -190,6 +190,47 @@ function startNavbar(){
     }
     apply(isOn());
   }
+  function addFixedLabel(host,text,target,idx,isBareSvg){
+    if(!host||!text||!target) return;
+    var l=host.querySelector('.au-nav-label[data-au-idx="'+idx+'"]');
+    if(!l){
+      l=document.createElement('span');
+      l.className='au-nav-label';
+      l.setAttribute('data-au-idx',idx);
+      host.appendChild(l);
+    }
+    l.textContent=text;
+    l.title=text;
+    l.onclick=function(){ target.click(); };
+    if(isBareSvg){
+      var hr=host.getBoundingClientRect();
+      var tr=target.getBoundingClientRect();
+      l.style.top=(tr.top-hr.top+tr.height/2)+'px';
+    } else {
+      l.style.top='';
+    }
+  }
+  function labelFixed(){
+    var nav=document.querySelector('[data-tc-role="navbar"]');
+    if(!nav) return;
+    var topNames=['收件箱','快速搜索'];
+    var grays=nav.querySelectorAll('.w-12.bg-gray-700');
+    for(var i=0;i<grays.length;i++){
+      addFixedLabel(grays[i].parentElement,topNames[i],grays[i],'t'+i,false);
+    }
+    var st=nav.querySelector('[data-tc-role="navbar-settings"]');
+    if(st){
+      var svgs=st.querySelectorAll(':scope > svg');
+      for(var j=0;j<svgs.length;j++){
+        addFixedLabel(st,j===svgs.length-1?'设置':'下载',svgs[j],'s'+j,true);
+      }
+      var stale=st.querySelectorAll('.au-nav-label[data-au-idx]');
+      for(var k=0;k<stale.length;k++){
+        var n=parseInt(stale[k].getAttribute('data-au-idx').slice(1),10);
+        if(isNaN(n)||n>=svgs.length) stale[k].remove();
+      }
+    }
+  }
   function fetchNames(){
     try{
       var raw=localStorage.getItem('jsonwebtoken')||'';
@@ -214,7 +255,7 @@ function startNavbar(){
   var t=null;
   var navMo=new MutationObserver(function(){
     if(t) clearTimeout(t);
-    t=setTimeout(function(){ ensureBtn(); labelize(); },120);
+    t=setTimeout(function(){ ensureBtn(); labelize(); labelFixed(); },120);
   });
   function begin(){
     var a=appEl();
@@ -226,6 +267,7 @@ function startNavbar(){
     ensureBtn();
     navMo.observe(nav,{childList:true,subtree:true});
     fetchNames();
+    labelFixed();
     return true;
   }
   var tries=0;

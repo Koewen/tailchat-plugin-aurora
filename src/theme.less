@@ -525,6 +525,10 @@ body {
   }
 
   // 展开态：底部设置区固定 72px 宽居中 + 间距收紧
+  [data-tc-role='navbar-settings'] {
+    position: relative; // 下载/设置文字标识的定位基准
+  }
+
   &.au-nav-expand [data-tc-role='navbar-settings'] {
     width: 72px !important;
     align-items: center;

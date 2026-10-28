@@ -487,6 +487,9 @@ body .ant-tooltip-inner {
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar'] > .flex-1 > .px-3 .ant-divider {
   margin: 6px 0 !important;
 }
+#tailchat-app.tailchat-app.theme-aurora [data-tc-role='navbar-settings'] {
+  position: relative;
+}
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar-settings'] {
   width: 72px !important;
   align-items: center;
