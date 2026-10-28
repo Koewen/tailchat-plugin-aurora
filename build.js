@@ -22,8 +22,9 @@ if (!fs.existsSync(SRC)) {
 }
 
 const css = fs.readFileSync(SRC, 'utf8');
-const hash = crypto.createHash('md5').update(css).digest('hex').slice(0, 8);
-const chunkFile = `theme-${hash}.js`;
+// chunk 文件名占位符：真实 hash 在末尾按「CSS + chunk + entry」联合内容计算，
+// 确保 JS 变更也会产生新文件名，避免 CDN/浏览器复用旧 chunk
+let chunkFile = '__CHUNK__';
 
 // 清理旧产物
 for (const f of fs.readdirSync(OUT)) {
@@ -44,7 +45,6 @@ try {
 } catch (e) { console.error('[aurora-theme] inject failed', e); }
 });
 `;
-fs.writeFileSync(path.join(OUT, chunkFile), chunk);
 
 // 入口：注册配色方案，命中时加载样式 chunk + 启动气泡左右分栏标记
 const entry = `definePlugin('${PLUGIN_ID}',["require","@capital/common"],function(r,e){"use strict";
@@ -135,6 +135,8 @@ function startNavbar(){
       b.title=on?'收起侧边栏':'展开侧边栏';
       b.setAttribute('aria-label',on?'收起侧边栏':'展开侧边栏');
       b.setAttribute('aria-expanded',on?'true':'false');
+      var tx=b.querySelector('.au-nav-toggle-text');
+      if(tx) tx.textContent=on?'收起':'展开';
     }
   }
   function toggle(){
@@ -175,17 +177,18 @@ function startNavbar(){
   }
   var ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 5 7 12 14 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>';
   function ensureBtn(){
-    var host=document.querySelector('[data-tc-role="navbar-settings"]')||document.querySelector('[data-tc-role="navbar"]');
-    if(!host) return;
-    var b=host.querySelector('.au-nav-toggle');
+    var nav=document.querySelector('[data-tc-role="navbar"]');
+    if(!nav) return;
+    var b=nav.querySelector('.au-nav-toggle');
     if(!b){
       b=document.createElement('button');
       b.className='au-nav-toggle';
       b.setAttribute('type','button');
       b.setAttribute('data-tc-role','au-nav-toggle');
-      b.innerHTML=ICON;
+      b.innerHTML=ICON+'<span class="au-nav-toggle-text"></span>';
       b.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); toggle(); };
-      host.appendChild(b);
+      // 置于导航栏顶部，首屏即可见（不再藏在底部设置区）
+      nav.insertBefore(b, nav.firstChild);
     }
     apply(isOn());
   }
@@ -243,6 +246,21 @@ e.sharedEvent.on("loadColorScheme",function(u){
 });
 });
 `;
-fs.writeFileSync(path.join(OUT, 'index.js'), entry);
+
+// 最終 hash：CSS + chunk + entry 聯合內容計算，保證 JS 改動也會換 chunk 文件名
+const hash = crypto
+  .createHash('md5')
+  .update(css + chunk + entry)
+  .digest('hex')
+  .slice(0, 8);
+chunkFile = `theme-${hash}.js`;
+fs.writeFileSync(
+  path.join(OUT, chunkFile),
+  chunk.replace(/__CHUNK__/g, chunkFile)
+);
+fs.writeFileSync(
+  path.join(OUT, 'index.js'),
+  entry.replace(/__CHUNK__/g, chunkFile)
+);
 
 console.log('built:', chunkFile, `(${(chunk.length / 1024).toFixed(1)} KB)`, '+ index.js');

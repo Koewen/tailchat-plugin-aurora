@@ -427,6 +427,12 @@ body .ant-tooltip-inner {
   width: 212px !important;
   align-items: flex-start;
 }
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar'] .space-y-2 > * + * {
+  margin-top: 4px !important;
+}
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar'] .overflow-y-hidden {
+  overflow-y: auto !important;
+}
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand [data-tc-role='navbar-settings'] {
   align-items: flex-start;
   padding-left: 12px;
@@ -461,24 +467,28 @@ body .ant-tooltip-inner {
   color: var(--au-accent);
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle {
-  width: 36px;
+  min-width: 36px;
   height: 36px;
-  margin-top: 6px;
+  margin: 0 auto 10px;
+  padding: 0 8px;
   border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   color: var(--au-accent);
   background: rgba(86, 111, 224, 0.12);
   border: 1px solid rgba(86, 111, 224, 0.26);
   box-shadow: 0 2px 10px rgba(72, 82, 118, 0.1);
   cursor: pointer;
   user-select: none;
-  padding: 0;
+  font-size: 12.5px;
+  font-weight: 500;
   line-height: 1;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle svg {
+  flex: none;
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle:hover {
@@ -490,12 +500,20 @@ body .ant-tooltip-inner {
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle:active {
   transform: translateY(0);
 }
+#tailchat-app.tailchat-app.theme-aurora .au-nav-toggle-text {
+  display: none;
+  white-space: nowrap;
+}
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-toggle {
-  margin-left: 0;
+  margin-left: 12px;
+  margin-right: auto;
   background: rgba(86, 111, 224, 0.16);
 }
 #tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-toggle svg {
   transform: rotate(180deg);
+}
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-toggle .au-nav-toggle-text {
+  display: inline;
 }
 @media (prefers-reduced-motion: reduce) {
   #tailchat-app.tailchat-app.theme-aurora::before,

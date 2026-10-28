@@ -86,6 +86,8 @@ function startNavbar(){
       b.title=on?'收起侧边栏':'展开侧边栏';
       b.setAttribute('aria-label',on?'收起侧边栏':'展开侧边栏');
       b.setAttribute('aria-expanded',on?'true':'false');
+      var tx=b.querySelector('.au-nav-toggle-text');
+      if(tx) tx.textContent=on?'收起':'展开';
     }
   }
   function toggle(){
@@ -126,17 +128,18 @@ function startNavbar(){
   }
   var ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 5 7 12 14 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>';
   function ensureBtn(){
-    var host=document.querySelector('[data-tc-role="navbar-settings"]')||document.querySelector('[data-tc-role="navbar"]');
-    if(!host) return;
-    var b=host.querySelector('.au-nav-toggle');
+    var nav=document.querySelector('[data-tc-role="navbar"]');
+    if(!nav) return;
+    var b=nav.querySelector('.au-nav-toggle');
     if(!b){
       b=document.createElement('button');
       b.className='au-nav-toggle';
       b.setAttribute('type','button');
       b.setAttribute('data-tc-role','au-nav-toggle');
-      b.innerHTML=ICON;
+      b.innerHTML=ICON+'<span class="au-nav-toggle-text"></span>';
       b.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); toggle(); };
-      host.appendChild(b);
+      // 置于导航栏顶部，首屏即可见（不再藏在底部设置区）
+      nav.insertBefore(b, nav.firstChild);
     }
     apply(isOn());
   }
@@ -187,7 +190,7 @@ function startNavbar(){
 e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u4EAE\u8272)",name:"light+aurora"});e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u6697\u8272)",name:"dark+aurora"});
 e.sharedEvent.on("loadColorScheme",function(u){
   if(u==="light+aurora"||u==="dark+aurora"){
-    new Promise(function(a,o){r(["./theme-2792d130"],a,o)});
+    new Promise(function(a,o){r(["./theme-535e0d04.js"],a,o)});
     startBubbles();
     startNavbar();
   }
