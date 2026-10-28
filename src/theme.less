@@ -1,0 +1,120 @@
+#tailchat-app.theme-aurora {
+  --tc-primary-color: #6aa3ff;
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-bg-strong: rgba(255, 255, 255, 0.24);
+  --glass-bd: rgba(255, 255, 255, 0.3);
+  --glass-blur: 18px;
+  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+
+  /* ---------- 流光溢彩动效背景 ---------- */
+  position: relative;
+
+  &:before,
+  &:after {
+    content: '';
+    position: fixed;
+    inset: -25%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* 极光光斑缓慢漂移 */
+  &:before {
+    filter: blur(70px);
+    opacity: 0.7;
+    background:
+      radial-gradient(circle at 18% 28%, #5b8cff 0, transparent 42%),
+      radial-gradient(circle at 82% 22%, #b06cff 0, transparent 42%),
+      radial-gradient(circle at 55% 82%, #34d3ff 0, transparent 46%),
+      radial-gradient(circle at 30% 70%, #ff7ac6 0, transparent 40%);
+    animation: aurora-drift 26s ease-in-out infinite alternate;
+  }
+
+  /* 旋转流光叠加 */
+  &:after {
+    opacity: 0.28;
+    filter: blur(60px);
+    background: conic-gradient(
+      from 0deg,
+      rgba(91, 140, 255, 0.45),
+      rgba(176, 108, 255, 0.45),
+      rgba(52, 211, 255, 0.45),
+      rgba(255, 122, 198, 0.4),
+      rgba(91, 140, 255, 0.45)
+    );
+    animation: aurora-spin 45s linear infinite;
+  }
+
+  @keyframes aurora-drift {
+    0% { transform: translate3d(-3%, -2%, 0) scale(1); }
+    50% { transform: translate3d(3%, 2%, 0) scale(1.12); }
+    100% { transform: translate3d(-2%, 3%, 0) scale(1.04); }
+  }
+  @keyframes aurora-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* 内容层需在背景之上 */
+  > * { position: relative; z-index: 1; }
+
+  /* ---------- 玻璃拟态 ---------- */
+  .bg-navbar-light,
+  .bg-navbar-dark,
+  .bg-sidebar-light,
+  .bg-sidebar-dark,
+  [class*='bg-content-'],
+  [data-tc-role^='content-'] {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+    border: 1px solid var(--glass-bd);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* 消息气泡 / 卡片 / 面板 / 输入框 */
+  .chat-message-item,
+  .message-item,
+  [data-tc-role='message'],
+  .el-card,
+  .el-input__wrapper,
+  .el-textarea__inner,
+  .el-dropdown-menu,
+  .el-dialog,
+  .el-popover,
+  .plugin-panel,
+  [class*='panel-'] {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid var(--glass-bd) !important;
+    box-shadow: var(--glass-shadow);
+    border-radius: 14px;
+  }
+
+  /* 按钮与高亮元素：玻璃高光 */
+  .el-button:not(.el-button--text):not(.is-link),
+  [class*='btn-'] {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-bd) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .el-button:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(31, 38, 135, 0.22); }
+
+  /* 滚动条弱化，突出玻璃感 */
+  ::-webkit-scrollbar-thumb {
+    background: var(--glass-bg-strong);
+    border-radius: 8px;
+  }
+}
+
+/* 暗色档：加深玻璃底色、提高发光对比 */
+#tailchat-app.theme-aurora.dark,
+#tailchat-app.dark.theme-aurora {
+  --glass-bg: rgba(16, 20, 40, 0.32);
+  --glass-bg-strong: rgba(20, 26, 50, 0.5);
+  --glass-bd: rgba(255, 255, 255, 0.16);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}

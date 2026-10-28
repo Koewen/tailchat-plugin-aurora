@@ -1,0 +1,2 @@
+definePlugin('@plugins/com.koewen.theme.aurora',["require","@capital/common"],function(r,e){"use strict";e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u4EAE\u8272)",name:"light+aurora"}),e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u6697\u8272)",name:"dark+aurora"}),e.sharedEvent.on("loadColorScheme",u=>{(u==="light+aurora"||u==="dark+aurora")&&new Promise(function(a,o){r(["./theme-3735a72f"],a,o)})})});
+//# sourceMappingURL=index.js.map

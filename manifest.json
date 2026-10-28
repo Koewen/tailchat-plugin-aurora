@@ -1,0 +1,11 @@
+{
+  "label": "Aurora Glass Theme",
+  "label.zh-CN": "流光玻璃主题",
+  "name": "com.koewen.theme.aurora",
+  "url": "https://fastly.jsdelivr.net/gh/Koewen/tailchat-plugin-aurora@main/plugins/com.koewen.theme.aurora/index.js",
+  "version": "1.0.0",
+  "author": "Koewen",
+  "description": "Glassmorphism with flowing aurora animated background",
+  "description.zh-CN": "玻璃拟态 + 流光溢彩动效背景",
+  "requireRestart": false
+}
