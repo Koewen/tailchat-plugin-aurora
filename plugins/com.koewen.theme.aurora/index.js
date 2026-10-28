@@ -110,6 +110,13 @@ function startNavbar(){
       var l=document.createElement('span');
       l.className='au-nav-label';
       l.textContent=name;
+      l.title=name;
+      l.onclick=(function(item){
+        return function(){
+          var trg=item.querySelector('div.w-12');
+          if(trg) trg.click();
+        };
+      })(it);
       it.appendChild(l);
     }
   }
@@ -172,7 +179,7 @@ function startNavbar(){
 e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u4EAE\u8272)",name:"light+aurora"});e.regPluginColorScheme({label:"\u6D41\u5149\u73BB\u7483(\u6697\u8272)",name:"dark+aurora"});
 e.sharedEvent.on("loadColorScheme",function(u){
   if(u==="light+aurora"||u==="dark+aurora"){
-    new Promise(function(a,o){r(["./theme-15deb52b"],a,o)});
+    new Promise(function(a,o){r(["./theme-510ef84e"],a,o)});
     startBubbles();
     startNavbar();
   }

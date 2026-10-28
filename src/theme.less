@@ -457,8 +457,12 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
     opacity: 0.92;
+    transition: color 0.15s ease;
+
+    &:hover { color: var(--au-accent); }
   }
 
   // 收缩/展开切换按钮

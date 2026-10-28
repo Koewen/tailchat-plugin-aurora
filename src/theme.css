@@ -437,8 +437,13 @@ body .ant-tooltip-inner {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   opacity: 0.92;
+  transition: color 0.15s ease;
+}
+#tailchat-app.tailchat-app.theme-aurora.au-nav-expand .au-nav-label:hover {
+  color: var(--au-accent);
 }
 #tailchat-app.tailchat-app.theme-aurora .au-nav-toggle {
   width: 40px;

@@ -159,6 +159,13 @@ function startNavbar(){
       var l=document.createElement('span');
       l.className='au-nav-label';
       l.textContent=name;
+      l.title=name;
+      l.onclick=(function(item){
+        return function(){
+          var trg=item.querySelector('div.w-12');
+          if(trg) trg.click();
+        };
+      })(it);
       it.appendChild(l);
     }
   }
