@@ -416,6 +416,75 @@ body {
   ::selection { background: rgba(125, 148, 255, 0.30); }
 }
 
+// ---------- 导航栏：收缩/展开（v1.5.0） ----------
+#tailchat-app.tailchat-app.theme-aurora {
+  [data-tc-role='navbar'] {
+    transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  // 展开态：加宽导航列，所有图标簇左对齐与群组行对齐
+  &.au-nav-expand [data-tc-role='navbar'] {
+    width: 212px !important;
+    align-items: flex-start;
+  }
+
+  &.au-nav-expand [data-tc-role='navbar-settings'] {
+    align-items: flex-start;
+    padding-left: 12px;
+  }
+
+  &.au-nav-expand .au-nav-toggle {
+    margin-left: 0;
+  }
+
+  // 群组名标签（展开态显示）
+  .au-nav-label {
+    display: none;
+  }
+
+  &.au-nav-expand .au-nav-label {
+    display: block;
+    position: absolute;
+    left: 60px;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--au-ink);
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    opacity: 0.92;
+  }
+
+  // 收缩/展开切换按钮
+  .au-nav-toggle {
+    width: 40px;
+    height: 36px;
+    margin: 2px auto 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    letter-spacing: -2px;
+    color: var(--au-ink-3);
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(86, 111, 224, 0.10);
+      color: var(--au-accent);
+    }
+  }
+}
+
 // ---------- 无障碍：减少动态时停用流光 ----------
 @media (prefers-reduced-motion: reduce) {
   #tailchat-app.tailchat-app.theme-aurora {
